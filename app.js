@@ -9,9 +9,35 @@ let activeScreen = "home";
 function loadData(){
   try{
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    if(saved && Array.isArray(saved.names) && Array.isArray(saved.prayers)) return saved;
+    if(saved && Array.isArray(saved.names) && Array.isArray(saved.prayers)){
+      saved.rosterChecks = saved.rosterChecks || {};
+      saved.prayerChecks = saved.prayerChecks || {};
+      saved.monthly = saved.monthly || {};
+      return saved;
+    }
   }catch(e){ console.warn("저장 데이터를 읽지 못했습니다.",e); }
-  return {names:[...DEFAULT_NAMES], prayers:DEFAULT_PRAYERS.map((p,i)=>({id:"p"+i,title:p[0],text:p[1]})), rosterChecks:{}, prayerChecks:{}};
+  return {
+    names:[...DEFAULT_NAMES],
+    prayers:DEFAULT_PRAYERS.map((p,i)=>({id:"p"+i,title:p[0],text:p[1]})),
+    rosterChecks:{}, prayerChecks:{}, monthly:{}
+  };
+}
+function monthKey(y,m){ return `${y}-${String(m).padStart(2,"0")}`; }
+function selectedMonth(screen=activeScreen){
+  const prefix = screen === "roster" ? "roster" : "prayer";
+  return {y:+document.getElementById(prefix+"Year").value, m:+document.getElementById(prefix+"Month").value};
+}
+function getMonthData(y,m,create=true){
+  data.monthly = data.monthly || {};
+  const k=monthKey(y,m);
+  if(!data.monthly[k] && create){
+    data.monthly[k]={
+      names:[...data.names],
+      prayers:data.prayers.map(p=>({...p}))
+    };
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
+  }
+  return data.monthly[k] || {names:data.names,prayers:data.prayers};
 }
 function saveData(){
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -41,6 +67,7 @@ function showScreen(name){
 }
 function renderRoster(){
   const y=+rosterYear.value,m=+rosterMonth.value,days=daysInMonth(y,m);
+  const monthData=getMonthData(y,m);
   const table=document.getElementById("rosterTable");
   table.innerHTML="";
   const thead=document.createElement("thead"),hr=document.createElement("tr");
@@ -48,7 +75,7 @@ function renderRoster(){
   for(let d=1;d<=days;d++){const th=document.createElement("th");th.className="day-head";th.textContent=d;hr.append(th);}
   thead.append(hr);table.append(thead);
   const tbody=document.createElement("tbody");
-  data.names.forEach((name,i)=>{
+  monthData.names.forEach((name,i)=>{
     const tr=document.createElement("tr"),th=document.createElement("td");th.textContent=name;tr.append(th);
     for(let d=1;d<=days;d++){
       const td=document.createElement("td"),cb=document.createElement("input");cb.type="checkbox";cb.setAttribute("aria-label",`${name} ${y}년 ${m}월 ${d}일`);
@@ -61,9 +88,9 @@ function renderRoster(){
   table.append(tbody);updateCounts();
 }
 function renderPrayers(){
-  const y=+prayerYear.value,m=+prayerMonth.value,days=daysInMonth(y,m),list=document.getElementById("prayerList");
+  const y=+prayerYear.value,m=+prayerMonth.value,monthData=getMonthData(y,m),list=document.getElementById("prayerList");
   list.innerHTML="";
-  data.prayers.forEach((p,i)=>{
+  monthData.prayers.forEach(p=>{
     const card=document.createElement("article");card.className="prayer-card";
     const top=document.createElement("div");top.className="prayer-card-top";
     const number=document.createElement("span");number.className="prayer-number";number.textContent="✿";
@@ -72,11 +99,9 @@ function renderPrayers(){
     const text=document.createElement("p");text.textContent=p.text;card.append(text);
     const line=document.createElement("div");line.className="prayer-checkline";
     const label=document.createElement("label"),cb=document.createElement("input");cb.type="checkbox";cb.checked=!!data.prayerChecks[key(y,m,today.getDate(),p.id)];
-    // 날짜별 체크 표시는 아래 일자 그리드에서 관리합니다.
-    cb.checked=false; label.append(cb,document.createTextNode("오늘 기원 완료"));
+    label.append(cb,document.createTextNode("오늘 기원 완료"));
     const date=document.createElement("span");date.textContent=`${y}년 ${m}월`;
     line.append(label,date);card.append(line);
-    cb.checked=!!data.prayerChecks[key(y,m,today.getDate(),p.id)];
     cb.addEventListener("change",()=>{const k=key(y,m,today.getDate(),p.id);if(cb.checked)data.prayerChecks[k]=true;else delete data.prayerChecks[k];saveData();});
     const days=document.createElement("div");days.className="prayer-days";
     const caption=document.createElement("div");caption.className="prayer-days-caption";caption.textContent="날짜별 기원 체크";days.append(caption);
@@ -85,34 +110,37 @@ function renderPrayers(){
       const lab=document.createElement("label");lab.className="day-check";
       const box=document.createElement("input");box.type="checkbox";box.checked=!!data.prayerChecks[key(y,m,d,p.id)];
       box.addEventListener("change",()=>{const k=key(y,m,d,p.id);if(box.checked)data.prayerChecks[k]=true;else delete data.prayerChecks[k];saveData();});
-      const span=document.createElement("span");span.textContent=d;
-      lab.append(box,span);grid.append(lab);
+      const span=document.createElement("span");span.textContent=d;lab.append(box,span);grid.append(lab);
     }
     days.append(grid);card.append(days);list.append(card);
   });
   updateCounts();
 }
 function updateCounts(){
-  const rc=Object.keys(data.rosterChecks).length;
+  const y=+rosterYear.value,m=+rosterMonth.value;
+  const prefix=`${y}-${String(m).padStart(2,"0")}-`;
+  const rc=Object.keys(data.rosterChecks).filter(k=>k.startsWith(prefix)).length;
   const el=document.getElementById("rosterCount");if(el)el.textContent=rc+"개 체크";
 }
 function openNameManager(){
   const dlg=document.getElementById("nameDialog");renderNameManager();dlg.showModal();
 }
 function renderNameManager(){
+  const {y,m}=selectedMonth("roster"),monthData=getMonthData(y,m);
   const list=document.getElementById("nameManageList");list.innerHTML="";
-  data.names.forEach((name,i)=>{
+  monthData.names.forEach((name,i)=>{
     const row=document.createElement("div");row.className="manage-item";
     const span=document.createElement("span");span.textContent=name;
-    const edit=document.createElement("button");edit.textContent="수정";edit.onclick=()=>{const v=prompt("이름 수정",name);if(v&&v.trim()){data.names[i]=v.trim();saveData();renderNameManager();renderRoster();}};
-    const del=document.createElement("button");del.textContent="삭제";del.className="delete";del.onclick=()=>{if(confirm(`'${name}'을(를) 명단에서 삭제할까요?`)){data.names.splice(i,1);saveData();renderNameManager();renderRoster();}};
+    const edit=document.createElement("button");edit.textContent="수정";edit.onclick=()=>{const v=prompt("이름 수정",name);if(v&&v.trim()){monthData.names[i]=v.trim();saveData();renderNameManager();renderRoster();}};
+    const del=document.createElement("button");del.textContent="삭제";del.className="delete";del.onclick=()=>{if(confirm(`'${name}'을(를) ${y}년 ${m}월 명단에서 삭제할까요?`)){monthData.names.splice(i,1);saveData();renderNameManager();renderRoster();}};
     row.append(span,edit,del);list.append(row);
   });
 }
 function openPrayerManager(){renderPrayerManager();document.getElementById("prayerDialog").showModal();}
 function renderPrayerManager(){
+  const {y,m}=selectedMonth("prayers"),monthData=getMonthData(y,m);
   const list=document.getElementById("prayerManageList");list.innerHTML="";
-  data.prayers.forEach((p,i)=>{
+  monthData.prayers.forEach((p,i)=>{
     const row=document.createElement("div");row.className="manage-item";
     const span=document.createElement("span");span.textContent=p.title;
     const edit=document.createElement("button");edit.textContent="수정";edit.onclick=()=>{
@@ -120,12 +148,28 @@ function renderPrayerManager(){
       const text=prompt("기원문 내용 수정",p.text);if(text===null)return;
       if(title.trim()&&text.trim()){p.title=title.trim();p.text=text.trim();saveData();renderPrayerManager();renderPrayers();}
     };
-    const del=document.createElement("button");del.textContent="삭제";del.className="delete";del.onclick=()=>{if(confirm(`'${p.title}' 기원문을 삭제할까요?`)){data.prayers.splice(i,1);saveData();renderPrayerManager();renderPrayers();}};
+    const del=document.createElement("button");del.textContent="삭제";del.className="delete";del.onclick=()=>{if(confirm(`'${p.title}' 기원문을 ${y}년 ${m}월에서 삭제할까요?`)){monthData.prayers.splice(i,1);saveData();renderPrayerManager();renderPrayers();}};
     row.append(span,edit,del);list.append(row);
   });
 }
+function importPreviousMonth(screen){
+  const prefix=screen==="roster"?"roster":"prayer";
+  const y=+document.getElementById(prefix+"Year").value,m=+document.getElementById(prefix+"Month").value;
+  const prevDate=new Date(y,m-2,1),py=prevDate.getFullYear(),pm=prevDate.getMonth()+1;
+  if(py<2026){alert("2026년 1월 이전 달은 불러올 수 없습니다.");return;}
+  const current=getMonthData(y,m),previous=getMonthData(py,pm);
+  if(!confirm(`${py}년 ${pm}월의 ${screen==="roster"?"명단":"가족기원문"}을 ${y}년 ${m}월로 복사할까요?\n현재 선택한 달의 내용은 복사한 내용으로 바뀝니다.`))return;
+  if(screen==="roster") current.names=[...previous.names];
+  else current.prayers=previous.prayers.map(p=>({...p}));
+  saveData();
+  if(screen==="roster"){renderRoster();renderNameManagerIfOpen();}
+  else{renderPrayers();renderPrayerManagerIfOpen();}
+  alert("전달 내용을 불러왔습니다. 원본 달의 내용은 변경되지 않았어요.");
+}
+function renderNameManagerIfOpen(){if(document.getElementById("nameDialog").open)renderNameManager();}
+function renderPrayerManagerIfOpen(){if(document.getElementById("prayerDialog").open)renderPrayerManager();}
 function exportBackup(){
-  const blob=new Blob([JSON.stringify({app:"prayer-journal",version:1,exportedAt:new Date().toISOString(),data},null,2)],{type:"application/json"});
+  const blob=new Blob([JSON.stringify({app:"prayer-journal",version:2,exportedAt:new Date().toISOString(),data},null,2)],{type:"application/json"});
   const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=`기원문백업-${new Date().toISOString().slice(0,10)}.json`;a.click();URL.revokeObjectURL(url);
 }
 function importBackup(file){
@@ -133,7 +177,7 @@ function importBackup(file){
     try{const obj=JSON.parse(reader.result),incoming=obj.data||obj;
       if(!Array.isArray(incoming.names)||!Array.isArray(incoming.prayers))throw new Error("백업 형식이 올바르지 않습니다.");
       if(confirm("현재 기록을 백업 파일 내용으로 바꿀까요? 기존 데이터는 덮어씁니다.")){
-        data={names:incoming.names,prayers:incoming.prayers,rosterChecks:incoming.rosterChecks||{},prayerChecks:incoming.prayerChecks||{}};
+        data={...incoming,rosterChecks:incoming.rosterChecks||{},prayerChecks:incoming.prayerChecks||{},monthly:incoming.monthly||{}};
         saveData();renderRoster();renderPrayers();alert("백업을 복원했습니다.");
       }
     }catch(e){alert("백업 파일을 읽을 수 없습니다: "+e.message);}
@@ -149,22 +193,25 @@ document.getElementById("manageNamesButton").addEventListener("click",openNameMa
 document.getElementById("managePrayersButton").addEventListener("click",openPrayerManager);
 document.getElementById("addNameButton").addEventListener("click",e=>{
   e.preventDefault();const input=document.getElementById("newNameInput"),v=input.value.trim();
-  if(!v){alert("이름을 입력해 주세요.");return;}data.names.push(v);input.value="";saveData();renderNameManager();renderRoster();
+  if(!v){alert("이름을 입력해 주세요.");return;}
+  const {y,m}=selectedMonth("roster");getMonthData(y,m).names.push(v);input.value="";saveData();renderNameManager();renderRoster();
 });
 document.getElementById("addPrayerButton").addEventListener("click",e=>{
   e.preventDefault();const title=document.getElementById("prayerTitleInput").value.trim(),text=document.getElementById("prayerTextInput").value.trim();
   if(!title||!text){alert("제목과 내용을 모두 입력해 주세요.");return;}
-  data.prayers.push({id:"p"+Date.now(),title,text});document.getElementById("prayerTitleInput").value="";document.getElementById("prayerTextInput").value="";
+  const {y,m}=selectedMonth("prayers");getMonthData(y,m).prayers.push({id:"p"+Date.now(),title,text});
+  document.getElementById("prayerTitleInput").value="";document.getElementById("prayerTextInput").value="";
   saveData();renderPrayerManager();renderPrayers();
 });
 ["rosterYear","rosterMonth"].forEach(id=>document.getElementById(id).addEventListener("change",renderRoster));
 ["prayerYear","prayerMonth"].forEach(id=>document.getElementById(id).addEventListener("change",renderPrayers));
 document.getElementById("rosterToday").addEventListener("click",()=>{rosterYear.value=currentYear;rosterMonth.value=today.getMonth()+1;renderRoster();});
 document.getElementById("prayerToday").addEventListener("click",()=>{prayerYear.value=currentYear;prayerMonth.value=today.getMonth()+1;renderPrayers();});
+const copyRoster=document.getElementById("copyPreviousRosterButton");if(copyRoster)copyRoster.addEventListener("click",()=>importPreviousMonth("roster"));
+const copyPrayer=document.getElementById("copyPreviousPrayerButton");if(copyPrayer)copyPrayer.addEventListener("click",()=>importPreviousMonth("prayers"));
 document.getElementById("saveRosterButton").addEventListener("click",()=>{saveData();alert("명단 기원 기록을 저장했어요. ♡");});
 document.getElementById("savePrayerButton").addEventListener("click",()=>{saveData();alert("가족기원문 기록을 저장했어요. ♡");});
 document.getElementById("importFile").addEventListener("change",e=>{if(e.target.files[0])importBackup(e.target.files[0]);e.target.value="";});
-// 백업 복원은 백업 버튼을 길게 누르는 대신 메인 하단의 키보드 단축키 Ctrl+Shift+I도 지원합니다.
 document.addEventListener("keydown",e=>{if(e.ctrlKey&&e.shiftKey&&e.key.toLowerCase()==="i")document.getElementById("importFile").click();});
 initSelectors();renderRoster();renderPrayers();
 if("serviceWorker" in navigator && location.protocol!=="file:"){window.addEventListener("load",()=>navigator.serviceWorker.register("./service-worker.js").catch(console.error));}

@@ -77,6 +77,7 @@
           <label>연도<select id="rosterYear"></select></label>
           <label>월<select id="rosterMonth"></select></label>
           <button class="small-button pale" id="rosterToday">오늘</button>
+          <button class="small-button pale" id="copyPreviousRosterButton">전달꺼 불러오기</button>
         </div>
         <div class="legend"><span>✓ 체크한 날짜는 자동 저장됩니다.</span><span id="rosterCount">0개 체크</span></div>
         <div class="table-wrap">
@@ -98,6 +99,7 @@
           <label>연도<select id="prayerYear"></select></label>
           <label>월<select id="prayerMonth"></select></label>
           <button class="small-button pale" id="prayerToday">오늘</button>
+          <button class="small-button pale" id="copyPreviousPrayerButton">전달꺼 불러오기</button>
         </div>
         <div class="prayer-list" id="prayerList"></div>
         <div class="action-row">
@@ -126,7 +128,7 @@
 
   <dialog id="prayerDialog" class="edit-dialog">
     <form method="dialog" id="prayerForm">
-      <h3>🧁 기원문 관리</h3>
+      <h3>🍰 기원문 관리</h3>
       <p>기원문을 추가하거나 수정할 수 있어요.</p>
       <input id="prayerTitleInput" type="text" maxlength="100" placeholder="기원문 제목">
       <textarea id="prayerTextInput" rows="5" placeholder="기원문 내용을 입력하세요"></textarea>
