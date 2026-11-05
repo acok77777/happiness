@@ -49,37 +49,20 @@ footer{text-align:center;color:#b19ca9;font-size:11px;padding:20px 0 5px}footer 
 .day-check{display:flex;align-items:center;justify-content:center;gap:3px;padding:5px 2px;border:1px solid #f0e4eb;border-radius:8px;background:#fff9fc;color:#8d7584;font-size:11px}
 .day-check input{accent-color:#c77f9f;margin:0;width:13px;height:13px}
 
-
-/* 가독성 보강: 명단과 기원문 글씨를 더 굵고 선명하게 */
-.menu-card strong,
-.page-heading h2,
-.prayer-card h3,
-.prayer-number,
-.tracker tbody td:first-child,
-.tracker thead th,
-.manage-item span,
-.edit-dialog h3,
-.edit-dialog p,
-.toolbar label,
-.legend,
-.prayer-card p {
-  font-weight: 700;
-}
-.tracker {
-  font-weight: 700;
-}
-.tracker .day-head {
-  font-weight: 700;
-}
+/* 기원문 글씨 가독성 보강 */
 .prayer-card h3 {
-  font-size: 17px;
-  color: #70485f;
+  font-size: 18px;
+  font-weight: 700;
 }
 .prayer-card p {
-  color: #5e505c;
-  font-size: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.9;
+  color: #665663;
 }
-.tracker td:first-child {
-  color: #634b5b;
-  font-size: 13px;
+.prayer-number {
+  font-weight: 700;
+}
+.day-check {
+  font-weight: 700;
 }

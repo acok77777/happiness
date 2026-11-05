@@ -19,7 +19,7 @@ function saveData(){
 }
 function yearOptions(select){
   select.innerHTML="";
-  for(let y=currentYear;y>=2026;y--){const o=document.createElement("option");o.value=y;o.textContent=y+"년";select.append(o);}
+  for(let y=2026;y<=2100;y++){const o=document.createElement("option");o.value=y;o.textContent=y+"년";select.append(o);}
 }
 function monthOptions(select){
   select.innerHTML="";
