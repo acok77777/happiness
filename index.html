@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="ko">
 <head>
@@ -5,21 +6,31 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#e9b6ca">
 <meta name="description" content="가족의 행복과 소중한 매일의 기원을 기록하는 공간">
+
 <title>진심으로 행복을 기원합니다 🌸</title>
+
 <link rel="manifest" href="./manifest.json">
 <link rel="icon" type="image/png" sizes="192x192" href="./아이콘/icon-192.png">
 <link rel="apple-touch-icon" href="./아이콘/icon-192.png">
+
 <meta property="og:type" content="website">
 <meta property="og:title" content="진심으로 행복을 기원합니다 🌸">
 <meta property="og:description" content="가족의 행복과 소중한 매일의 기원을 기록하는 공간입니다.">
-<meta property="og:image" content="https://acok77777.github.io/happiness/아이콘/icon-512.png">
-<meta property="og:image:secure_url" content="https://acok77777.github.io/happiness/아이콘/icon-512.png">
+
+<!-- 공유 미리보기 이미지 -->
+<meta property="og:image" content="https://acok77777.github.io/happiness/%EC%95%84%EC%9D%B4%EC%BD%98/icon-512.png">
+<meta property="og:image:secure_url" content="https://acok77777.github.io/happiness/%EC%95%84%EC%9D%B4%EC%BD%98/icon-512.png">
 <meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="512">
+<meta property="og:image:height" content="512">
 <meta property="og:url" content="https://acok77777.github.io/happiness/">
+
 <link rel="stylesheet" href="./style.css">
 </head>
+
 <body>
 <div class="app-shell">
+
 <header class="hero">
   <div class="hero-flower">✿　🌸　🧁　✿</div>
   <p class="eyebrow">FAMILY PRAYER JOURNAL</p>
@@ -28,64 +39,163 @@
 </header>
 
 <main>
+
 <section id="home" class="screen active">
+
   <div class="welcome-card">
     <span class="card-deco">🌷</span>
     <h2>오늘도 마음을 담아 기원합니다</h2>
     <p>가족과 소중한 분들의 행복을 한 걸음씩 기록해요.</p>
   </div>
+
   <div class="home-actions">
-    <button class="home-tile pink" data-screen="prayers"><span>🌸</span><b>가족기원문</b><small>기원문별 매일 체크하기</small><i>열기　→</i></button>
-    <button class="home-tile lavender" data-screen="roster"><span>🧁</span><b>명단</b><small>이름별 매일 체크하기</small><i>열기　→</i></button>
+    <button class="home-tile pink" data-screen="prayers">
+      <span>🌸</span>
+      <b>가족기원문</b>
+      <small>기원문별 매일 체크하기</small>
+      <i>열기　→</i>
+    </button>
+
+    <button class="home-tile lavender" data-screen="roster">
+      <span>🧁</span>
+      <b>명단</b>
+      <small>이름별 매일 체크하기</small>
+      <i>열기　→</i>
+    </button>
   </div>
+
   <div class="backup-row">
     <button id="backupBtn" class="soft-btn">💾 백업파일 저장</button>
     <button id="restoreBtn" class="soft-btn">📂 백업파일 복원</button>
     <input id="restoreFile" type="file" accept="application/json,.json" hidden>
   </div>
+
   <p class="home-note">🌼 꽃처럼 피어나는 행복한 하루하루 🌼</p>
 </section>
 
+
 <section id="roster" class="screen">
-  <div class="section-heading"><p class="eyebrow">DAILY NAME CHECK</p><h2>🌷 명단 기원 기록</h2><p>이름별로 기원한 날짜를 체크해 주세요.</p></div>
+
+  <div class="section-heading">
+    <p class="eyebrow">DAILY NAME CHECK</p>
+    <h2>🌷 명단 기원 기록</h2>
+    <p>이름별로 기원한 날짜를 체크해 주세요.</p>
+  </div>
+
   <div class="toolbar">
     <label>연도 <select id="rosterYear"></select></label>
     <label>월 <select id="rosterMonth"></select></label>
     <button id="rosterToday" class="soft-btn">오늘</button>
   </div>
-  <div class="progress-wrap"><div class="progress-label"><b id="rosterProgressText">이번 달 실천 0회</b><span id="rosterProgressPct">0%</span></div><div class="progress"><span id="rosterProgress"></span></div></div>
+
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <b id="rosterProgressText">이번 달 실천 0회</b>
+      <span id="rosterProgressPct">0%</span>
+    </div>
+    <div class="progress">
+      <span id="rosterProgress"></span>
+    </div>
+  </div>
+
   <div class="table-hint">← 좌우로 밀어서 날짜를 확인하세요 →</div>
-  <div class="table-wrap"><table id="rosterTable"></table></div>
-  <div class="manage-panel"><h3>🌼 명단 관리</h3><p>이름을 추가하거나 수정·삭제할 수 있어요.</p><button id="editNames" class="soft-btn">명단 추가 · 수정 · 삭제</button></div>
-  <div class="footer-actions"><button class="soft-btn" data-back>← 이전</button><button class="main-btn" id="saveRoster">💾 저장</button><button class="soft-btn" data-home>메인으로</button></div>
+  <div class="table-wrap">
+    <table id="rosterTable"></table>
+  </div>
+
+  <div class="manage-panel">
+    <h3>🌼 명단 관리</h3>
+    <p>이름을 추가하거나 수정·삭제할 수 있어요.</p>
+    <button id="editNames" class="soft-btn">명단 추가 · 수정 · 삭제</button>
+  </div>
+
+  <div class="footer-actions">
+    <button class="soft-btn" data-back>← 이전</button>
+    <button class="main-btn" id="saveRoster">💾 저장</button>
+    <button class="soft-btn" data-home>메인으로</button>
+  </div>
 </section>
 
+
 <section id="prayers" class="screen">
-  <div class="section-heading"><p class="eyebrow">DAILY PRAYER CHECK</p><h2>🌸 가족기원문</h2><p>기원문별로 매일 체크하고 마음을 기록해요.</p></div>
+
+  <div class="section-heading">
+    <p class="eyebrow">DAILY PRAYER CHECK</p>
+    <h2>🌸 가족기원문</h2>
+    <p>기원문별로 매일 체크하고 마음을 기록해요.</p>
+  </div>
+
   <div class="toolbar">
     <label>연도 <select id="prayerYear"></select></label>
     <label>월 <select id="prayerMonth"></select></label>
     <button id="prayerToday" class="soft-btn">오늘</button>
   </div>
-  <div class="progress-wrap"><div class="progress-label"><b id="prayerProgressText">이번 달 실천 0회</b><span id="prayerProgressPct">0%</span></div><div class="progress"><span id="prayerProgress"></span></div></div>
+
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <b id="prayerProgressText">이번 달 실천 0회</b>
+      <span id="prayerProgressPct">0%</span>
+    </div>
+    <div class="progress">
+      <span id="prayerProgress"></span>
+    </div>
+  </div>
+
   <div id="prayerList" class="prayer-list"></div>
-  <div class="manage-panel"><h3>🧁 기원문 관리</h3><p>나만의 기원문을 추가하거나 내용을 수정할 수 있어요.</p><button id="editPrayers" class="soft-btn">기원문 추가 · 수정 · 삭제</button></div>
-  <div class="footer-actions"><button class="soft-btn" data-back>← 이전</button><button class="main-btn" id="savePrayer">💾 저장</button><button class="soft-btn" data-home>메인으로</button></div>
+
+  <div class="manage-panel">
+    <h3>🧁 기원문 관리</h3>
+    <p>나만의 기원문을 추가하거나 내용을 수정할 수 있어요.</p>
+    <button id="editPrayers" class="soft-btn">기원문 추가 · 수정 · 삭제</button>
+  </div>
+
+  <div class="footer-actions">
+    <button class="soft-btn" data-back>← 이전</button>
+    <button class="main-btn" id="savePrayer">💾 저장</button>
+    <button class="soft-btn" data-home>메인으로</button>
+  </div>
 </section>
+
 </main>
-<footer class="site-footer">✿ 진심으로 행복을 기원합니다 ✿</footer>
+
+<footer class="site-footer">
+  ✿ 진심으로 행복을 기원합니다 ✿
+</footer>
+
 </div>
 
+
 <dialog id="manageDialog" class="dialog">
-  <div class="dialog-top"><h2 id="dialogTitle">명단 관리</h2><button id="closeDialog" class="x-btn">✕</button></div>
+
+  <div class="dialog-top">
+    <h2 id="dialogTitle">명단 관리</h2>
+    <button id="closeDialog" class="x-btn">✕</button>
+  </div>
+
   <form id="manageForm">
-    <input id="itemTitle" type="text" placeholder="이름 또는 기원문 제목" maxlength="160">
-    <textarea id="itemBody" rows="4" placeholder="기원문 내용을 입력하세요. (명단 관리에서는 비워두세요.)"></textarea>
+    <input
+      id="itemTitle"
+      type="text"
+      placeholder="이름 또는 기원문 제목"
+      maxlength="160"
+    >
+
+    <textarea
+      id="itemBody"
+      rows="4"
+      placeholder="기원문 내용을 입력하세요. (명단 관리에서는 비워두세요.)"
+    ></textarea>
+
     <button class="main-btn" type="submit">＋ 추가하기</button>
   </form>
+
   <div id="manageItems" class="manage-items"></div>
+
 </dialog>
+
 <div id="toast" role="status" aria-live="polite"></div>
+
 <script src="./app.js"></script>
+
 </body>
 </html>
