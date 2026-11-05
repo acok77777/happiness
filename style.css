@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Nanum+Myeongjo:wght@400;700&display=swap');
+:root{--pink:#f6dce7;--pink-deep:#c77f9f;--pink-dark:#9e5e7c;--cream:#fffaf2;--lav:#e9e3f7;--lav-deep:#9385b8;--ink:#514653;--muted:#938895;--line:#eadfe7;--white:#fff}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(135deg,#fff9f3 0%,#fff4f7 48%,#f7f3ff 100%);color:var(--ink);font-family:'Gowun Dodum',sans-serif;min-height:100vh}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+.app-shell{max-width:1120px;margin:0 auto;padding:18px 24px 28px}
+.topbar{display:flex;align-items:center;gap:14px;padding:8px 2px 18px;border-bottom:1px solid #eadfe8}
+.icon-button{width:42px;height:42px;border:1px solid #eadde6;border-radius:15px;background:#fffdfb;color:#a66d88;font-size:22px;box-shadow:0 3px 12px #d7bfd01c}
+.brand{flex:1;text-align:center}.brand-kicker,.eyebrow{font-size:10px;letter-spacing:2px;color:#b18a9e;margin:0 0 5px}
+.brand-title{font-family:'Nanum Myeongjo',serif;font-size:19px;font-weight:700;color:#815c72}
+.screen{display:none;padding:26px 0 12px}.screen.active{display:block}
+.hero-card{position:relative;overflow:hidden;text-align:center;padding:42px 20px 32px;border:1px solid #f0dce5;border-radius:30px;background:linear-gradient(135deg,#fff5f7,#fffaf1 58%,#f3efff);box-shadow:0 12px 35px #b88ba51c}
+.hero-card:before,.hero-card:after{content:"✿";position:absolute;color:#e8c4d4;font-size:70px;opacity:.55}.hero-card:before{left:22px;top:14px}.hero-card:after{right:24px;bottom:12px}
+.hero-deco{font-size:24px;margin-bottom:12px}.hero-card h1{font-family:'Nanum Myeongjo',serif;font-size:clamp(30px,5vw,48px);line-height:1.45;margin:12px 0;color:#77556d}.hero-card h1 span{color:#bd7e9c}.hero-copy{line-height:1.9;color:#8e7a87;font-size:15px}.hero-bottom{display:inline-block;margin-top:14px;padding:8px 18px;border-radius:30px;background:#ffffffa8;color:#ad7892;font-size:12px}
+.home-actions{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:22px 0}
+.menu-card{display:flex;align-items:center;gap:15px;text-align:left;border:1px solid transparent;border-radius:22px;padding:22px 20px;min-height:112px;color:var(--ink);box-shadow:0 7px 22px #a88ca51a}
+.menu-card.pink{background:#fceaf0;border-color:#f2d9e4}.menu-card.lavender{background:#eeeafb;border-color:#e1daf4}
+.menu-card .menu-icon{font-size:32px}.menu-card span:nth-child(2){flex:1}.menu-card strong{display:block;font-size:19px;color:#805d72}.menu-card small{display:block;color:#9c8995;margin-top:6px;font-size:12px}.menu-card b{font-size:27px;color:#b58aa1}
+.home-note{display:flex;align-items:center;gap:12px;padding:16px 18px;background:#fffdf8;border:1px solid #f0e8db;border-radius:18px;color:#887a7e}.home-note>span{font-size:25px}.home-note strong,.home-note small{display:block}.home-note small{font-size:12px;margin-top:5px;color:#a09698}
+.page-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}.page-heading h2{font-family:'Nanum Myeongjo',serif;color:#805c73;font-size:27px;margin:4px 0}.page-heading p:last-child{color:#9b8d98;font-size:13px;margin:5px 0}
+.small-button,.secondary-button,.primary-button{border-radius:13px;padding:10px 15px;border:1px solid #eadce5;background:#fff;color:#916b81;font-size:13px;white-space:nowrap}
+.small-button{background:#f9e8ef;border-color:#f1d9e4}.small-button.pale{background:#f0ecfa;border-color:#e5def3;color:#8275a3}
+.toolbar{display:flex;align-items:end;gap:12px;padding:14px 16px;background:#fffdfb;border:1px solid #eee3e9;border-radius:17px;margin-bottom:12px}
+.toolbar label{display:flex;align-items:center;gap:8px;font-size:13px;color:#927d8b}.toolbar select{border:1px solid #e9dce5;border-radius:10px;background:#fff;padding:8px 10px;color:#6f5b69}
+.legend{display:flex;justify-content:space-between;font-size:12px;color:#a08e9a;margin:12px 2px}
+.table-wrap{overflow:auto;border:1px solid #eadde5;border-radius:16px;background:#fff;max-height:62vh}
+.tracker{border-collapse:separate;border-spacing:0;min-width:100%;font-size:12px}
+.tracker th,.tracker td{border-right:1px solid #eee5eb;border-bottom:1px solid #eee5eb;text-align:center;min-width:34px;height:36px;padding:3px}
+.tracker thead th{position:sticky;top:0;background:#f9edf2;color:#86677a;z-index:2}
+.tracker th:first-child,.tracker td:first-child{position:sticky;left:0;z-index:1;min-width:150px;text-align:left;padding:7px 10px;background:#fffaf5}
+.tracker thead th:first-child{z-index:3;background:#f4e6ed}
+.tracker tbody tr:nth-child(even) td{background:#fefcff}.tracker tbody tr:nth-child(even) td:first-child{background:#fcf7f4}
+.tracker input{accent-color:#c77f9f;width:16px;height:16px;cursor:pointer}
+.tracker .day-head{font-weight:400}
+.action-row{display:flex;justify-content:center;gap:10px;margin:20px 0 8px}.primary-button{background:linear-gradient(135deg,#d99ab4,#bdaee0);border:0;color:white;padding:11px 22px;box-shadow:0 5px 13px #c9a7c72b}
+.prayer-list{display:grid;gap:12px}
+.prayer-card{background:#fffdfb;border:1px solid #eee2e9;border-radius:18px;padding:17px 18px;box-shadow:0 5px 16px #b99aaa12}
+.prayer-card-top{display:flex;align-items:center;gap:10px}.prayer-number{width:30px;height:30px;display:grid;place-items:center;background:#f9e8ef;border-radius:11px;color:#a56f89}.prayer-card h3{font-size:16px;color:#805d72;margin:0;flex:1}.prayer-card p{white-space:pre-line;line-height:1.8;color:#766b76;font-size:13px;margin:12px 0 10px}
+.prayer-checkline{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px dashed #eadde5;color:#a18d99;font-size:12px}.prayer-checkline label{display:flex;align-items:center;gap:7px;cursor:pointer}.prayer-checkline input{accent-color:#c77f9f;width:17px;height:17px}
+.manage-list{display:grid;gap:7px;max-height:240px;overflow:auto;margin-top:14px}.manage-item{display:flex;align-items:center;gap:7px;padding:8px 10px;background:#fff8fb;border-radius:10px;font-size:13px}.manage-item span{flex:1}.manage-item button{border:0;background:#f0eafa;color:#806e9e;border-radius:8px;padding:6px 9px;font-size:11px}.manage-item button.delete{background:#fbe8eb;color:#b16d7f}
+.edit-dialog{width:min(560px,calc(100% - 28px));border:1px solid #ead9e4;border-radius:22px;padding:22px;background:#fffafc;color:var(--ink);box-shadow:0 20px 70px #4d33442e}.edit-dialog::backdrop{background:#47334466}.edit-dialog h3{margin:0 0 7px;color:#805d72;font-family:'Nanum Myeongjo',serif}.edit-dialog p{font-size:12px;color:#9b8c96}.edit-dialog input,.edit-dialog textarea{width:100%;border:1px solid #eadde5;border-radius:11px;padding:11px;margin:6px 0;background:#fff}.edit-dialog textarea{resize:vertical;line-height:1.6}.dialog-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:8px}
+footer{text-align:center;color:#b19ca9;font-size:11px;padding:20px 0 5px}footer span{color:#d58aa8}
+@media(max-width:650px){.app-shell{padding:12px 12px 22px}.brand-title{font-size:16px}.brand-kicker{font-size:8px}.home-actions{grid-template-columns:1fr;gap:10px}.menu-card{min-height:88px;padding:17px}.hero-card{padding:35px 14px 28px}.hero-card:before{font-size:48px}.hero-card:after{font-size:48px}.page-heading{align-items:flex-start;flex-direction:column}.toolbar{flex-wrap:wrap}.toolbar label{flex:1}.toolbar select{min-width:90px}.tracker th:first-child,.tracker td:first-child{min-width:125px}.action-row{flex-wrap:wrap}.action-row button{flex:1}.table-wrap{max-height:60vh}}
+
+.prayer-days{margin-top:12px;padding-top:10px;border-top:1px dashed #eadde5}
+.prayer-days-caption{font-size:11px;color:#a18d99;margin-bottom:8px}
+.day-check-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(35px,1fr));gap:5px}
+.day-check{display:flex;align-items:center;justify-content:center;gap:3px;padding:5px 2px;border:1px solid #f0e4eb;border-radius:8px;background:#fff9fc;color:#8d7584;font-size:11px}
+.day-check input{accent-color:#c77f9f;margin:0;width:13px;height:13px}
+
+
+/* 가독성 보강: 명단과 기원문 글씨를 더 굵고 선명하게 */
+.menu-card strong,
+.page-heading h2,
+.prayer-card h3,
+.prayer-number,
+.tracker tbody td:first-child,
+.tracker thead th,
+.manage-item span,
+.edit-dialog h3,
+.edit-dialog p,
+.toolbar label,
+.legend,
+.prayer-card p {
+  font-weight: 700;
+}
+.tracker {
+  font-weight: 700;
+}
+.tracker .day-head {
+  font-weight: 700;
+}
+.prayer-card h3 {
+  font-size: 17px;
+  color: #70485f;
+}
+.prayer-card p {
+  color: #5e505c;
+  font-size: 14px;
+}
+.tracker td:first-child {
+  color: #634b5b;
+  font-size: 13px;
+}
